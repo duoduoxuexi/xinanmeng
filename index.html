@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>手绘地图</title>
+<style>
+  /* 基础样式重置 */
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden; /* 防止水平滚动 */
+  }
+  /* 地图容器样式 */
+  #map-container {
+    position: relative;
+    width: 130%;
+    max-width: 980px; /* 根据需要调整 */
+    margin: auto;
+    overflow: hidden;
+    box-sizing: border-box; /* 确保宽度包含padding和border */
+    padding: 0 10px; /* 根据需要调整，为容器添加内边距 */
+    height: 100vh; /* 容器高度填满视口高度 */
+    user-select: none;/*不可下载
+  }
+  /* 地图图片样式 */
+  #map-image {
+    width: 100%;
+    height: auto;
+  }
+  /* 动物和城市GIF样式 */
+  .animal-gif, .city-gif {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 使GIF居中 */
+    max-width: 100%; /* 最大宽度为容器的100% */
+    max-height: 100%; /* 最大高度为容器的100% */
+    width: auto; /* 宽度自适应 */
+    height: auto; /* 高度自适应 */
+  }
+  .city-gif {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 使GIF居中 */
+    max-width: 60%; /* 最大宽度为容器的100% */
+    max-height: 60%; /* 最大高度为容器的100% */
+    width: auto; /* 宽度自适应 */
+    height: auto; /* 高度自适应 */
+    cursor: pointer; /* 鼠标悬停时显示手形光标 */
+  }
+ #video-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -130%); /* 使视频容器水平居中 */
+  z-index: 1000;
+  border-radius: 20px; /* 可选：为视频容器添加圆角 */
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
+  overflow: hidden; /* 防止视频超出容器 */
+  width: 90%; /* 视频容器宽度，根据需要调整 */
+  max-height: 90%; /* 视频容器最大高度，根据需要调整 */
+}
+  /* 视频播放器样式 */
+  #video-player {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  /* 关闭按钮样式 */
+  #close-video-btn {
+    position: absolute;
+    top: 50; /* 紧贴视频播放器的顶部 */
+    right: 0; /* 紧贴视频播放器的右侧 */
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    z-index: 1001;
+  }
+</style>
+</head>
+<body>
+
+<div id="map-container">
+  <img id="map-image" src="正面2.png" alt="手绘地图" usemap="#map">
+  <map name="map">
+    <!-- 更多点和视频 -->
+  </map>
+  <!-- 动态动物GIF -->
+<img class="animal-gif" src="马儿透明.gif" style="top: 492px; left: 171px; width: 50px; height: auto;" alt="马儿GIF">
+<img class="animal-gif" src="大雁.gif" style="top: 225px; left: 720px; width: 120px; height: auto;" alt="大雁GIF">
+<!-- 更多动物GIF -->
+<!-- 城市GIF -->
+<img class="city-gif" src="阿尔山市.gif" style="top: 70px; left: 210px; width: 65px; height: auto;" alt="阿尔山市GIF">
+<img class="city-gif" src="科尔沁右翼前旗.gif" style="top: 383px; left: 215px; width: 65px; height: auto;" alt="科尔沁右翼前旗GIF">
+<img class="city-gif" src="突泉县.gif" style="top: 595px; left: 360px; width: 65px; height: auto;" alt="突泉县GIF">
+<img class="city-gif" src="乌兰浩特市.gif" style="top: 513px; left: 718px; width: 65px; height: auto;" alt="乌兰浩特市GIF">
+<img class="city-gif" src="扎赉特旗.gif" style="top: 202px; left: 561px; width: 65px; height: auto;" alt="扎赉特旗GIF">
+<img class="city-gif" src="科尔沁右翼中旗.gif" style="top: 617px; left: 253px; width: 65px; height: auto;" alt="科尔沁右翼中旗GIF">
+  <!-- 更多城市GIF -->
+  <div id="video-container">
+    <video id="video-player" controls>
+      <source id="video-source" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <!-- 关闭按钮现在位于视频容器外部 -->
+  <button id="close-video-btn">关闭</button>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const videoContainer = document.getElementById('video-container');
+  const videoPlayer = document.getElementById('video-player');
+  const closeVideoBtn = document.getElementById('close-video-btn');
+  const cityGifs = document.querySelectorAll('.city-gif');
+  const videoSrcs = {
+    '阿尔山市GIF': '阿尔山市.mp4',
+    '科尔沁右翼前旗GIF': '科尔沁右翼前旗.mp4',
+    '科尔沁右翼中旗GIF': '科尔沁右翼中旗.mp4',
+    '扎赉特旗GIF': '扎赉特旗.mp4',
+    '乌兰浩特市GIF': '乌兰浩特市.mp4',
+    '突泉县GIF': '突泉县.mp4',
+    // 其他城市GIF和视频的映射关系
+  };
+
+  cityGifs.forEach(gif => {
+    gif.addEventListener('click', function() {
+      const videoSrc = videoSrcs[gif.alt];
+      if (videoSrc) {
+        videoPlayer.src = [videoSrc];
+        videoPlayer.load();
+        videoPlayer.play();
+        videoContainer.style.display = 'block';
+      }
+    });
+  });
+
+  closeVideoBtn.addEventListener('click', function() {
+    videoPlayer.pause();
+    videoContainer.style.display = 'none';
+  });
+
+ videoPlayer.addEventListener('ended', function() {
+    videoPlayer.pause();
+    videoContainer.style.display = 'none';
+  });
+
+  videoContainer.addEventListener('click', function(event) {
+    if (event.target === videoContainer) {
+      closeVideoBtn.click();
+    }
+  });
+});
+</script>
+
+</body>
+</html>
