@@ -21,7 +21,7 @@
     box-sizing: border-box; /* 确保宽度包含padding和border */
     padding: 0 10px; /* 根据需要调整，为容器添加内边距 */
     height: 100vh; /* 容器高度填满视口高度 */
-    user-select: none;/*不可下载
+    user-select: none;
   }
   /* 地图图片样式 */
   #map-image {
@@ -102,10 +102,10 @@
 <img class="city-gif" src="扎赉特旗.gif" style="top: 202px; left: 561px; width: 65px; height: auto;" alt="扎赉特旗GIF">
 <img class="city-gif" src="科尔沁右翼中旗.gif" style="top: 617px; left: 253px; width: 65px; height: auto;" alt="科尔沁右翼中旗GIF">
   <!-- 更多城市GIF -->
-  <div id="video-container">
-    <video id="video-player" controls>
-      <source id="video-source" type="video/mp4">
-      Your browser does not support the video tag.
+  <video id="video-player" controls>
+    <!-- 更新视频源为云端链接 -->
+    <source id="video-source" src="https://your-cloud-url.com/阿尔山市视频.mp4" type="video/mp4">
+    Your browser does not support the video tag.
     </video>
     <!-- 关闭按钮现在位于视频容器外部 -->
   <button id="close-video-btn">关闭</button>
@@ -119,12 +119,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const closeVideoBtn = document.getElementById('close-video-btn');
   const cityGifs = document.querySelectorAll('.city-gif');
   const videoSrcs = {
-    '阿尔山市GIF': '阿尔山市.mp4',
-    '科尔沁右翼前旗GIF': '科尔沁右翼前旗.mp4',
-    '科尔沁右翼中旗GIF': '科尔沁右翼中旗.mp4',
-    '扎赉特旗GIF': '扎赉特旗.mp4',
-    '乌兰浩特市GIF': '乌兰浩特市.mp4',
-    '突泉县GIF': '突泉县.mp4',
+     '阿尔山市GIF': 'https://cloud.06dn.com/api/v3/file/preview/d7789TO', 
+    '科尔沁右翼前旗GIF': 'https://cloud.06dn.com/api/v3/file/preview/211jNTQ',
+    '科尔沁右翼中旗GIF': 'https://cloud.06dn.com/api/v3/file/preview/jLLvgUY',
+    '扎赉特旗GIF': 'https://cloud.06dn.com/api/v3/file/preview/QWWexfq',
+    '乌兰浩特市GIF': 'https://cloud.06dn.com/api/v3/file/preview/nggdLC8',
+    '突泉县GIF': 'https://cloud.06dn.com/api/v3/file/preview/eLLZbuO',
     // 其他城市GIF和视频的映射关系
   };
 
